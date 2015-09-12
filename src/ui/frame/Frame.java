@@ -27,7 +27,7 @@ public class Frame extends JFrame {
 	/** 界面的宽 */
 	public static int WIDTH = 900;
 	/** 界面的高 */
-	public static int HEIGHT = 600;
+	public static int HEIGHT = 700;
 	/** 主界面的背景色 */
 	public static Color MAIN_COLOR = Color.WHITE;
 
