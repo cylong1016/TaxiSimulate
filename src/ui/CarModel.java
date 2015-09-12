@@ -20,7 +20,6 @@ public class CarModel extends JLabel {
 	private CarData carData;
 
 	public CarModel(CarData carData) {
-		super(String.valueOf(carData.ID), JLabel.CENTER);
 		this.carData = carData;
 		this.setBackground(Color.BLUE);
 		this.setOpaque(true);

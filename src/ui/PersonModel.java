@@ -4,6 +4,7 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 
+import util.Util;
 import config.Config;
 import entity.PersonData;
 
@@ -21,16 +22,29 @@ public class PersonModel extends JLabel {
 	private PersonData personData;
 	
 	public PersonModel(PersonData personData) {
-		super(String.valueOf(personData.ID), JLabel.CENTER);
 		this.personData = personData;
 		this.setBackground(Color.GREEN);
 		this.setOpaque(true);
 		this.setLocation((personData.loc.x + 1) * Config.SIZE + Config.SIZE / 2, (personData.loc.y + 1) * Config.SIZE);
 		this.setSize(Config.SIZE / 2, Config.SIZE);
+		new Vanish().start();
 	}
 	
 	public void move() {
 		this.setLocation((personData.loc.x + 1) * Config.SIZE + Config.SIZE / 2, (personData.loc.y + 1) * Config.SIZE);
+	}
+	
+	class Vanish extends Thread {
+		
+		@Override
+		public void run() {
+			while(true) {
+				Util.sleep(200);
+				if(personData.geton) {
+					PersonModel.this.setVisible(false);
+				}
+			}
+		}
 	}
 
 }

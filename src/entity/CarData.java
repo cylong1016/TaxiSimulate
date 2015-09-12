@@ -15,7 +15,7 @@ public class CarData extends Entity {
 	private static final int RIGHT = 1;
 	private static final int DOWN = 2;
 	private static final int LEFT = 3;
-	
+
 	/** 每个方向的反方向 */
 	private static final int[] AGAINST = {2, 3, 0, 1};
 
@@ -23,6 +23,11 @@ public class CarData extends Entity {
 	public boolean full = false;
 	/** 上一步的方向 */
 	private int state = 1;
+
+	/** 车总共走的路程 */
+	public static int totalPassThroughGrid = 0;
+	/** 载人走的格子数 */
+	public static int effectPassThroughGrid = 0;
 
 	public CarData(int ID, Block block, Traffic traffic) {
 		super(ID, block, traffic);
@@ -33,8 +38,9 @@ public class CarData extends Entity {
 		while(true) {
 			Util.sleep(500);
 			int direction = state;
-			if(Math.random() >= 0.5 || isMargin()) { // 有50%的概率或者在边缘就重新定义方向
-				if(isMargin()) {
+			boolean isMargin = isMargin();
+			if (Math.random() >= 0.5 || isMargin) { // 有50%的概率或者在边缘就重新定义方向
+				if (isMargin) {
 					direction = AGAINST[direction]; //  在边缘就直接取反方向，简单粗暴
 					move(direction);
 					Util.sleep(500);
@@ -52,6 +58,7 @@ public class CarData extends Entity {
 
 	private void move(int direction) {
 		curBlock.getCarSet().remove(this); // 离开，从当前的块中移除汽车
+		addTotalPassThroughGrid();
 		switch(direction) {
 		case UP:
 			moveUP();
@@ -69,10 +76,20 @@ public class CarData extends Entity {
 		// 计算出当前所在的块，把出租车标记在上面
 		curBlock = blocks[loc.y][loc.x];
 		ArrayList<PersonData> person = curBlock.getPersonSet();
-		if(person.size() != 0) {
+		if (person.size() != 0) {
 			PersonData personData = person.get(0);
-			System.out.println("车 " + this.ID + " 人 " + personData.ID);
+			personData.geton = true; // 乘客上车
+			this.full = true; // 车满
+			person.remove(0); // 删除乘客信息
 		}
 		curBlock.getCarSet().add(this);
+	}
+	
+	private synchronized void addTotalPassThroughGrid() {
+		totalPassThroughGrid++;
+	}
+	
+	private synchronized void addEffectPassThroughGrid() {
+		effectPassThroughGrid++;
 	}
 }

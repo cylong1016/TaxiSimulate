@@ -8,8 +8,8 @@ package config;
 public class Config {
 
 	/** 方块数量 */
-	public static final int NUM = 70;
+	public static final int NUM = 50;
 	/** 方块大小 */
-	public static final int SIZE = 8;
+	public static final int SIZE = 12;
 
 }

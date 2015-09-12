@@ -25,9 +25,9 @@ public class MainPanel extends JPanel {
 	private Traffic traffic = new Traffic();
 	private int size = Config.SIZE;
 	private Block[][] blocks;
-	private int carNum = 10732;
+	private int carNum = 150;
 	private CarModel[] carsModel = new CarModel[carNum];
-	private int personNum = 206134;
+	private int personNum = 5000;
 	private PersonModel[] personModel = new PersonModel[personNum];
 
 	public MainPanel() {
@@ -45,8 +45,8 @@ public class MainPanel extends JPanel {
 	 */
 	private void addCars() {
 		for(int i = 0; i < carNum; i++) {
-			int x = (int)(Math.random() * Config.NUM);
-			int y = (int)(Math.random() * Config.NUM);
+			int x = (int)(Math.random() * (Config.NUM - 2)) + 1;
+			int y = (int)(Math.random() * (Config.NUM - 2)) + 1;
 			Block block = blocks[x][y];
 			CarData carData = new CarData(i, block, traffic);
 			carData.start();
@@ -63,17 +63,23 @@ public class MainPanel extends JPanel {
 	 * @version 2015年9月12日 下午3:25:37
 	 */
 	private void addPerson() {
-		for(int i = 0; i < personNum; i++) {
-			int x = (int)(Math.random() * Config.NUM);
-			int y = (int)(Math.random() * Config.NUM);
-			Block block = blocks[x][y];
-			PersonData personData = new PersonData(i, block, traffic, new Point());
-			personData.start();
-			block.getPersonSet().add(personData);
-
-			personModel[i] = new PersonModel(personData);
-			this.add(personModel[i]);
-		}
+		new Thread() {
+			public void run() {
+				for(int i = 0; i < personNum; i++) {
+					Util.sleep(250);
+					int startX = (int)(Math.random() * Config.NUM);
+					int startY = (int)(Math.random() * Config.NUM);
+					Block block = blocks[startX][startY];
+					int endX = (int)(Math.random() * Config.NUM);
+					int endY = (int)(Math.random() * Config.NUM);
+					PersonData personData = new PersonData(i, block, traffic, new Point(endX, endY));
+					personData.start();
+					block.getPersonSet().add(personData);
+					personModel[i] = new PersonModel(personData);
+					MainPanel.this.add(personModel[i]);
+				}
+			}
+		}.start();
 	}
 
 	@Override
