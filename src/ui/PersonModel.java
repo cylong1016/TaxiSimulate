@@ -25,12 +25,12 @@ public class PersonModel extends JLabel {
 		this.personData = personData;
 		this.setBackground(Color.GREEN);
 		this.setOpaque(true);
-		this.setLocation(personData.loc.x, personData.loc.y - Config.SIZE / 2);
+		this.setLocation((personData.loc.x + 1) * Config.SIZE + Config.SIZE / 2, (personData.loc.y + 1) * Config.SIZE);
 		this.setSize(Config.SIZE / 2, Config.SIZE);
 	}
 	
 	public void move() {
-		this.setLocation(personData.loc.x, personData.loc.y - Config.SIZE / 2);
+		this.setLocation((personData.loc.x + 1) * Config.SIZE + Config.SIZE / 2, (personData.loc.y + 1) * Config.SIZE);
 	}
 
 }

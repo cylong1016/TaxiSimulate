@@ -2,7 +2,6 @@ package entity;
 
 import java.util.ArrayList;
 
-import config.Config;
 import util.Util;
 
 /**
@@ -68,7 +67,7 @@ public class CarData extends Entity {
 			break;
 		}
 		// 计算出当前所在的块，把出租车标记在上面
-		curBlock = blocks[loc.y / Config.SIZE - 1][loc.x / Config.SIZE - 1];
+		curBlock = blocks[loc.y][loc.x];
 		ArrayList<PersonData> person = curBlock.getPersonSet();
 		if(person.size() != 0) {
 			PersonData personData = person.get(0);

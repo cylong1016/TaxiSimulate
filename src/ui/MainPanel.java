@@ -25,9 +25,9 @@ public class MainPanel extends JPanel {
 	private Traffic traffic = new Traffic();
 	private int size = Config.SIZE;
 	private Block[][] blocks;
-	private int carNum = 5;
+	private int carNum = 10732;
 	private CarModel[] carsModel = new CarModel[carNum];
-	private int personNum = 5;
+	private int personNum = 206134;
 	private PersonModel[] personModel = new PersonModel[personNum];
 
 	public MainPanel() {
@@ -82,7 +82,7 @@ public class MainPanel extends JPanel {
 		for(int i = 0; i < blocks.length; i++) {
 			for(int j = 0; j < blocks[i].length; j++) {
 				Block block = blocks[i][j];
-				g.drawRect(block.x - size / 2, block.y - size / 2, size, size);
+				g.drawRect((block.x + 1) * size, (block.y + 1) * size, size, size);
 			}
 		}
 	}

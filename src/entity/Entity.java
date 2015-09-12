@@ -12,14 +12,14 @@ import config.Config;
 public class Entity extends Thread {
 
 	public int ID;
-	
+
 	/** 所在的坐标 */
 	public Point loc;
 	/** 街道 */
 	protected Traffic traffic;
-	
+
 	protected Block[][] blocks;
-	
+
 	/** 当前所在方块 */
 	protected Block curBlock;
 
@@ -33,45 +33,43 @@ public class Entity extends Thread {
 	}
 
 	public void moveUP() {
-		loc.y -= Config.SIZE;
+		loc.y--;
 	}
 
 	public void moveDown() {
-		loc.y += Config.SIZE;
+		loc.y++;
 	}
 
 	public void moveLeft() {
-		loc.x -= Config.SIZE;
+		loc.x--;
 	}
 
 	public void moveRight() {
-		loc.x += Config.SIZE;
+		loc.x++;
 	}
-	
+
 	public boolean isMargin() {
-		if(loc.y <= Config.SIZE) {
+		if (loc.y <= 0) {
 			return true;
 		}
-		
-		if(loc.y >= Config.SIZE * Config.NUM) {
+
+		if (loc.y >= Config.NUM - 1) {
 			return true;
 		}
-		
-		if(loc.x <= Config.SIZE) {
+
+		if (loc.x <= 0) {
 			return true;
 		}
-		
-		if(loc.x >= Config.SIZE * Config.NUM) {
+
+		if (loc.x >= Config.NUM - 1) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
-	
 	public Block getCurBlock() {
 		return this.curBlock;
 	}
-	
-	
+
 }

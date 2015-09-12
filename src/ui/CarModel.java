@@ -24,12 +24,12 @@ public class CarModel extends JLabel {
 		this.carData = carData;
 		this.setBackground(Color.BLUE);
 		this.setOpaque(true);
-		this.setLocation(carData.loc.x - Config.SIZE / 2, carData.loc.y - Config.SIZE / 2);
+		this.setLocation((carData.loc.x + 1) * Config.SIZE, (carData.loc.y + 1) * Config.SIZE);
 		this.setSize(Config.SIZE / 2, Config.SIZE);
 	}
 
 	public void move() {
-		this.setLocation(carData.loc.x - Config.SIZE / 2, carData.loc.y - Config.SIZE / 2);
+		this.setLocation((carData.loc.x + 1) * Config.SIZE, (carData.loc.y + 1) * Config.SIZE);
 	}
 
 }
