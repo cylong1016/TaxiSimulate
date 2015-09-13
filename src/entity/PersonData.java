@@ -16,7 +16,7 @@ public class PersonData extends Entity {
 	/** 是否上车 */
 	public boolean geton;
 	/** 等待时间 秒 */
-	private int waitTime = 15;
+	private int waitTime = 10;
 
 	/** 乘上车的人 */
 	public static int PEOPLE_WITH_CAR = 0;

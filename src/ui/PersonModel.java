@@ -25,13 +25,9 @@ public class PersonModel extends JLabel {
 		this.personData = personData;
 		this.setBackground(Color.GREEN);
 		this.setOpaque(true);
-		this.setLocation((personData.loc.x + 1) * Config.SIZE + Config.SIZE / 2, (personData.loc.y + 1) * Config.SIZE);
-		this.setSize(Config.SIZE / 2, Config.SIZE);
+		this.setLocation((personData.loc.x + 1) * Config.SIZE + Config.SIZE * 2 / 3, (personData.loc.y + 1) * Config.SIZE);
+		this.setSize(Config.SIZE / 3, Config.SIZE);
 		new Vanish().start();
-	}
-	
-	public void move() {
-		this.setLocation((personData.loc.x + 1) * Config.SIZE + Config.SIZE / 2, (personData.loc.y + 1) * Config.SIZE);
 	}
 	
 	class Vanish extends Thread {
