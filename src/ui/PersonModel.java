@@ -36,7 +36,7 @@ public class PersonModel extends JLabel {
 		public void run() {
 			while(true) {
 				Util.sleep(200);
-				if(personData.geton) {
+				if(personData.isGeton()) {
 					PersonModel.this.setVisible(false);
 				}
 			}

@@ -12,17 +12,17 @@ import config.Config;
  * @author cylong
  * @version 2015年9月13日 上午11:34:29
  */
-public class Clock extends JLabel {
+public class ShowTime extends JLabel {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = 4148081753365278883L;
 	
 	private Font font = new Font("微软雅黑", Font.PLAIN, 20);
 	
-	public Clock() {
+	public ShowTime() {
 		super("时间: 0", JLabel.CENTER);
-		this.setSize(100, 50);
-		this.setLocation(750, 100);
+		this.setSize(120, 50);
+		this.setLocation(720, 60);
 		this.setFont(font);
 		new Run().start();
 	}

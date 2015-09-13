@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import util.Util;
 import config.Config;
+import entity.Area;
 import entity.Block;
 import entity.CarData;
 import entity.PersonData;
@@ -30,12 +31,14 @@ public class MainPanel extends JPanel {
 	private CarModel[] carsModel = new CarModel[carNum];
 	private PersonModel[] personModel = new PersonModel[personNum];
 	
-	private Clock clock;
+	private ShowTime clock;
+	private ShowInfo info;
 	
 	private double [] distributePercent = {0.015, 0.09, 0.115, 0.13, 0.15,
 	                                       0.15, 0.13, 0.115, 0.09, 0.015};
 	/** 整个城市横竖分成多少个区域 */
-	private int areaNum = 10;
+	private int areaNum = Config.AREA_NUM;
+	private Area[][] areas;
 	private int gridPerArea = Config.NUM / areaNum;
 	private double[][] areaPercent = new double[areaNum][areaNum];
 	private double[] linearPercent = new double[areaNum * areaNum];
@@ -43,8 +46,12 @@ public class MainPanel extends JPanel {
 	public MainPanel() {
 		this.setLayout(null);
 		blocks = traffic.getBlocks();
-		clock = new Clock();
+		areaNum = traffic.getAreaNum();
+		areas = traffic.getAreas();
+		clock = new ShowTime();
 		this.add(clock);
+		info = new ShowInfo(areas);
+		this.add(info);
 		
 		for(int i = 0; i < areaPercent.length; i++) {
 			for(int j = 0; j < areaPercent[i].length; j++) {
@@ -95,13 +102,10 @@ public class MainPanel extends JPanel {
 			public void run() {
 				
 				for(int i = 0; i < personNum; i++) {
-//					if(i % ((personNum / Config.TOTAL_TIME) / 10) == 0) {
-//						Util.sleep(25); // 每0.1秒出现一些人
-//					}
-					Util.sleep(6);
-					System.out.println(i);
 					int[] areaIndex = getAreaIndex();
-					// 整体中人起始坐标
+					Util.sleep(18);
+					System.out.println(i);
+					// 整体地图人起始坐标
 					int startX = areaIndex[0];
 					int startY = areaIndex[1];
 					Block block = blocks[startX][startY];
@@ -181,9 +185,10 @@ public class MainPanel extends JPanel {
 				break;
 			}
 		}
-		// 落在哪个区域
+		// 计算落在哪个区域
 		int x = t % areaNum;
 		int y = t / areaNum;
+		areas[x][y].addTotalPerson();
 		
 		// 相对整体的起始坐标
 		int startX = (int)((Math.random() * gridPerArea) + x * gridPerArea);

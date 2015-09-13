@@ -22,6 +22,8 @@ public class Entity extends Thread {
 
 	/** 当前所在方块 */
 	protected Block curBlock;
+	
+	protected Area[][] areas;
 
 	public Entity(int ID, Block curBlock, Traffic traffic) {
 		super();
@@ -30,6 +32,7 @@ public class Entity extends Thread {
 		this.loc = new Point(curBlock.x, curBlock.y);
 		this.traffic = traffic;
 		this.blocks = traffic.getBlocks();
+		this.areas = traffic.getAreas();
 	}
 
 	public void moveUP() {

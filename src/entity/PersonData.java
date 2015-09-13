@@ -2,6 +2,7 @@ package entity;
 
 import java.awt.Point;
 
+import config.Config;
 import util.Util;
 
 /**
@@ -14,9 +15,9 @@ public class PersonData extends Entity {
 	/** 想要去的地方 */
 	public Point end;
 	/** 是否上车 */
-	public boolean geton;
+	private boolean geton;
 	/** 等待时间 秒 */
-	private int waitTime = 10;
+	private int waitTime = Config.WAIT_TIME;
 
 	/** 乘上车的人 */
 	public static int PEOPLE_WITH_CAR = 0;
@@ -25,16 +26,27 @@ public class PersonData extends Entity {
 		super(ID, curBlock, traffic);
 		this.end = end;
 	}
-	
+
 	public static synchronized void addPeopleWithCar() {
 		PEOPLE_WITH_CAR++; // 坐上车的人数 +1
+	}
+
+	public boolean isGeton() {
+		return this.geton;
+	}
+
+	public void setGeton(boolean geton) {
+		// 此人所在区域中的乘车人数+1
+		int gridPerArea = Config.NUM / Config.AREA_NUM;
+		areas[loc.x / gridPerArea][loc.y / gridPerArea].addPersonWithCar();
+		this.geton = geton;
 	}
 
 	@Override
 	public void run() {
 		while(true) {
 			Util.sleep(1000);
-			if(geton) { // 15秒内上车了
+			if (geton) { // 15秒内上车了
 				break;
 			}
 			waitTime--;

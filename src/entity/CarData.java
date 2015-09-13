@@ -36,7 +36,7 @@ public class CarData extends Entity {
 	public static int totalPassThroughGrid = 0;
 	/** 载人走的格子数 */
 	public static int effectPassThroughGrid = 0;
-
+	
 	public CarData(int ID, Block block, Traffic traffic) {
 		super(ID, block, traffic);
 		this.originaLoc = new Point(curBlock.x, curBlock.y);
@@ -67,7 +67,7 @@ public class CarData extends Entity {
 			if(personData == null) {
 				return null;
 			}
-			personData.geton = true; // 乘客上车
+			personData.setGeton(true);; // 乘客上车
 			PersonData.addPeopleWithCar();
 			this.full = true; // 车满
 			toDestination(personData.end); // 车上有人，按照一定路线走
