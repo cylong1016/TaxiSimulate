@@ -3,6 +3,7 @@ package entity;
 import java.awt.Point;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import config.Config;
 import util.Util;
 
 /**
@@ -21,7 +22,7 @@ public class CarData extends Entity {
 	private static final int[] AGAINST = {2, 3, 0, 1};
 	
 	/** 汽车走每格需要的时间 */
-	private long timePerGrid = 500;
+	private long timePerGrid = 1000;
 
 	/** 是否有人 */
 	public boolean full = false;
@@ -100,10 +101,10 @@ public class CarData extends Entity {
 	 */
 	private void randomRun() {
 		int direction = state;
-		boolean isMargin = isMargin();
-		if (Math.random() >= 0.5 || isMargin) { // 有50%的概率或者在边缘就重新定义方向
-			if (isMargin) {
-				direction = AGAINST[direction]; //  在边缘就直接取反方向，简单粗暴
+		int isMargin = isMargin();
+		if (Math.random() >= 0.5 || isMargin != -1) { // 有50%的概率或者在边缘就重新定义方向
+			if (isMargin != - 1) {
+				direction = AGAINST[isMargin]; //  在边缘就直接取反方向，简单粗暴
 			} else {
 				direction = (int)(Math.random() * 4);
 				while(AGAINST[direction] == state) { // 如果和刚刚的方向相反就重新选择方向
@@ -123,6 +124,32 @@ public class CarData extends Entity {
 			System.out.println(loc.x);
 		}
 		curBlock.getCarSet().add(this);
+	}
+	
+	/**
+	 * 车是否在边缘
+	 * @return 在哪个边缘 。 -1代表车不在边缘
+	 * @author cylong
+	 * @version 2015年9月13日  下午1:51:19
+	 */
+	public int isMargin() {
+		if (loc.y <= 0) {
+			return UP;
+		}
+
+		if (loc.y >= Config.NUM - 1) {
+			return DOWN;
+		}
+
+		if (loc.x <= 0) {
+			return LEFT;
+		}
+
+		if (loc.x >= Config.NUM - 1) {
+			return RIGHT;
+		}
+
+		return -1;
 	}
 
 	private void move(int direction) {

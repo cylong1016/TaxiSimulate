@@ -31,6 +31,10 @@ public class MainPanel extends JPanel {
 	private PersonModel[] personModel = new PersonModel[personNum];
 	
 	private Clock clock;
+	
+	private double [] distributePercent = {0.3, 0.26, 0.23, 0.18, 0.03};
+	/** 整个城市横竖分成多少个区域 */
+	private int areaNum = 10;
 
 	public MainPanel() {
 		this.setLayout(null);
@@ -49,8 +53,8 @@ public class MainPanel extends JPanel {
 	 */
 	private void addCars() {
 		for(int i = 0; i < carNum; i++) {
-			int x = (int)(Math.random() * (Config.NUM - 2)) + 1;
-			int y = (int)(Math.random() * (Config.NUM - 2)) + 1;
+			int x = (int)(Math.random() * (Config.NUM - 1));
+			int y = (int)(Math.random() * (Config.NUM - 1));
 			Block block = blocks[x][y];
 			CarData carData = new CarData(i, block, traffic);
 			carData.start();
@@ -70,7 +74,9 @@ public class MainPanel extends JPanel {
 		new Thread() {
 			public void run() {
 				for(int i = 0; i < personNum; i++) {
-					Util.sleep(10);
+					if(i % ((personNum / Config.TOTAL_TIME) / 10) == 0) {
+						Util.sleep(100); // 每0.1秒出现一些人
+					}
 					int startX = (int)(Math.random() * Config.NUM);
 					int startY = (int)(Math.random() * Config.NUM);
 					Block block = blocks[startX][startY];

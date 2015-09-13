@@ -13,11 +13,11 @@ public class Config {
 	public static final int SIZE = 6;
 	
 	/** 人数 */
-	public static final int PERSON_NUM = 60000;
+	public static final int PERSON_NUM = 72000;
 	/** 车数 */
-	public static final int CAR_NUM = 2000;
+	public static final int CAR_NUM = 10000;
 	
 	/** 总时间/秒 */
-	public static final int TOTAL_TIME = 360;
+	public static final int TOTAL_TIME = 100;
 
 }
