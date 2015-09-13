@@ -1,5 +1,6 @@
 package entity;
 
+import java.awt.Point;
 import java.util.ArrayList;
 
 import util.Util;
@@ -18,9 +19,14 @@ public class CarData extends Entity {
 
 	/** 每个方向的反方向 */
 	private static final int[] AGAINST = {2, 3, 0, 1};
+	
+	/** 汽车走每格需要的时间 */
+	private long timePerGrid = 500;
 
 	/** 是否有人 */
 	public boolean full = false;
+	/** 有人时候的目的地 */
+	private Point destination = new Point();
 	/** 上一步的方向 */
 	private int state = 1;
 
@@ -36,24 +42,84 @@ public class CarData extends Entity {
 	@Override
 	public void run() {
 		while(true) {
-			Util.sleep(500);
-			int direction = state;
-			boolean isMargin = isMargin();
-			if (Math.random() >= 0.5 || isMargin) { // 有50%的概率或者在边缘就重新定义方向
-				if (isMargin) {
-					direction = AGAINST[direction]; //  在边缘就直接取反方向，简单粗暴
-					move(direction);
-					Util.sleep(500);
-				} else {
+			Util.sleep(timePerGrid);
+			ArrayList<PersonData> person = curBlock.getPersonSet();
+			if (person.size() != 0 && !full) {
+				PersonData personData = person.get(0);
+				personData.geton = true; // 乘客上车
+				destination = personData.end;
+				this.full = true; // 车满
+				person.remove(0); // 删除乘客在路上的信息
+				toDestination(); // 车上有人，按照一定路线走
+			} else {
+				randomRun(); // 车上没人，随便走
+			}
+
+		}
+	}
+
+	private void toDestination() {
+		if(loc.x - destination.x > 0) {
+			while(loc.x != destination.x) {
+				move(LEFT);
+				addEffectPassThroughGrid();
+				Util.sleep(timePerGrid);
+			}
+		} else if(loc.x - destination.x < 0) {
+			while(loc.x != destination.x) {
+				move(RIGHT);
+				addEffectPassThroughGrid();
+				Util.sleep(timePerGrid);
+			}
+		}
+		
+		if(loc.y - destination.y > 0) {
+			while(loc.y != destination.y) {
+				move(UP);
+				addEffectPassThroughGrid();
+				Util.sleep(timePerGrid);
+			}
+		} else if(loc.y - destination.y < 0) {
+			while(loc.y != destination.y) {
+				move(DOWN);
+				addEffectPassThroughGrid();
+				Util.sleep(timePerGrid);
+			}
+		}
+		
+		this.full = false; // 送完人了
+	}
+
+	/**
+	 * 车上没人的时候随机走
+	 * @author cylong
+	 * @version 2015年9月13日 上午8:46:16
+	 */
+	private void randomRun() {
+		int direction = state;
+		boolean isMargin = isMargin();
+		if (Math.random() >= 0.5 || isMargin) { // 有50%的概率或者在边缘就重新定义方向
+			if (isMargin) {
+				direction = AGAINST[direction]; //  在边缘就直接取反方向，简单粗暴
+			} else {
+				direction = (int)(Math.random() * 4);
+				while(AGAINST[direction] == state) { // 如果和刚刚的方向相反就重新选择方向
 					direction = (int)(Math.random() * 4);
-					while(AGAINST[direction] == state) { // 如果和刚刚的方向相反就重新选择方向
-						direction = (int)(Math.random() * 4);
-					}
 				}
 			}
-			move(direction);
-			state = direction;
 		}
+		move(direction);
+		state = direction;
+
+		// 计算出当前所在的块，把出租车标记在上面
+		try {
+			curBlock = blocks[loc.y][loc.x];
+		} catch (Exception e) {
+			System.out.println("ID:" + ID);
+			System.out.println(loc.y);
+			System.out.println(loc.x);
+		}
+		curBlock.getCarSet().add(this);
 	}
 
 	private void move(int direction) {
@@ -73,23 +139,13 @@ public class CarData extends Entity {
 			moveLeft();
 			break;
 		}
-		// 计算出当前所在的块，把出租车标记在上面
-		curBlock = blocks[loc.y][loc.x];
-		ArrayList<PersonData> person = curBlock.getPersonSet();
-		if (person.size() != 0) {
-			PersonData personData = person.get(0);
-			personData.geton = true; // 乘客上车
-			this.full = true; // 车满
-			person.remove(0); // 删除乘客信息
-		}
-		curBlock.getCarSet().add(this);
 	}
-	
-	private synchronized void addTotalPassThroughGrid() {
+
+	private static synchronized void addTotalPassThroughGrid() {
 		totalPassThroughGrid++;
 	}
-	
-	private synchronized void addEffectPassThroughGrid() {
+
+	private static synchronized void addEffectPassThroughGrid() {
 		effectPassThroughGrid++;
 	}
 }

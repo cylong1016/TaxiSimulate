@@ -28,7 +28,13 @@ public class CarModel extends JLabel {
 	}
 
 	public void move() {
-		this.setLocation((carData.loc.x + 1) * Config.SIZE, (carData.loc.y + 1) * Config.SIZE);
+		if(carData.full) {
+			this.setBackground(Color.RED);
+			this.setLocation((carData.loc.x + 1) * Config.SIZE + Config.SIZE / 2, (carData.loc.y + 1) * Config.SIZE);
+		} else {
+			this.setBackground(Color.BLUE);
+			this.setLocation((carData.loc.x + 1) * Config.SIZE, (carData.loc.y + 1) * Config.SIZE);
+		}
 	}
 
 }

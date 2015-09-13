@@ -19,25 +19,30 @@ public class PersonData extends Entity {
 	private int waitTime = 15;
 
 	/** 多少人没有乘上车 */
-	public static int leave = 0;
+	public static int LEAVE = 0;
 
-	public PersonData(int ID, Block block, Traffic traffic, Point end) {
-		super(ID, block, traffic);
+	public PersonData(int ID, Block curBlock, Traffic traffic, Point end) {
+		super(ID, curBlock, traffic);
 		this.end = end;
 	}
 	
-	private synchronized void addLeave() {
-		leave++; // 未坐上车的人数 +1
+	private static synchronized void addLeave() {
+		LEAVE++; // 未坐上车的人数 +1
 	}
 
 	@Override
 	public void run() {
 		while(true) {
 			Util.sleep(1000);
+			if(geton) { // 15秒内上车了
+				break;
+			}
 			waitTime--;
 			if (waitTime <= 0) {
 				geton = true; // 人已经没有耐心等了，坐其他车走掉了
+				curBlock.getPersonSet().remove(PersonData.this); // 街道上的人移除
 				addLeave();
+				break;
 			}
 		}
 	}

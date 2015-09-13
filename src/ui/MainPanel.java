@@ -25,9 +25,9 @@ public class MainPanel extends JPanel {
 	private Traffic traffic = new Traffic();
 	private int size = Config.SIZE;
 	private Block[][] blocks;
-	private int carNum = 150;
+	public static int carNum = Config.CAR_NUM;
+	public static int personNum = Config.PERSON_NUM;
 	private CarModel[] carsModel = new CarModel[carNum];
-	private int personNum = 5000;
 	private PersonModel[] personModel = new PersonModel[personNum];
 
 	public MainPanel() {
