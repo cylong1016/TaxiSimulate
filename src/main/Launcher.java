@@ -27,16 +27,14 @@ public class Launcher {
  */
 class Time extends Thread {
 
-	/** 总时间/秒 */
-	private int totalTime = 30;
 	@Override
 	public void run() {
 		int temp = 0;
-		while((temp++) != totalTime) {
+		while((temp++) != Config.TOTAL_TIME) {
 			Util.sleep(1000);
 		}
 
-		double personWithCarPercent = 1 - PersonData.LEAVE * 1.0 / Config.PERSON_NUM;
+		double personWithCarPercent = PersonData.PEOPLE_WITH_CAR * 1.0 / Config.PERSON_NUM;
 		double carWithoutPerson = 1 - CarData.effectPassThroughGrid * 1.0 / CarData.totalPassThroughGrid;
 
 		System.out.println("出租车数：" + Config.CAR_NUM
@@ -44,7 +42,7 @@ class Time extends Thread {
 				+ " 载人路程：" + CarData.effectPassThroughGrid 
 				+ " 空载率：" + carWithoutPerson);
 		System.out.println("总人数：" + Config.PERSON_NUM
-				+ " 被接到的人数：" + (Config.PERSON_NUM - PersonData.LEAVE)
+				+ " 被接到的人数：" + PersonData.PEOPLE_WITH_CAR
 				+ " 人被接到概率:" + personWithCarPercent);
 
 	}

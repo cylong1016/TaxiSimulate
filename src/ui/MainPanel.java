@@ -29,10 +29,14 @@ public class MainPanel extends JPanel {
 	public static int personNum = Config.PERSON_NUM;
 	private CarModel[] carsModel = new CarModel[carNum];
 	private PersonModel[] personModel = new PersonModel[personNum];
+	
+	private Clock clock;
 
 	public MainPanel() {
 		this.setLayout(null);
 		blocks = traffic.getBlocks();
+		clock = new Clock();
+		this.add(clock);
 		addCars();
 		addPerson();
 		new Run().start();

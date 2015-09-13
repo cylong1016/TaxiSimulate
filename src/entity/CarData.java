@@ -47,6 +47,7 @@ public class CarData extends Entity {
 			if (person.size() != 0 && !full) {
 				PersonData personData = person.get(0);
 				personData.geton = true; // 乘客上车
+				PersonData.addPeopleWithCar();
 				destination = personData.end;
 				this.full = true; // 车满
 				person.remove(0); // 删除乘客在路上的信息
@@ -115,9 +116,9 @@ public class CarData extends Entity {
 		try {
 			curBlock = blocks[loc.y][loc.x];
 		} catch (Exception e) {
-			System.out.println("ID:" + ID);
-			System.out.println(loc.y);
-			System.out.println(loc.x);
+//			System.out.println("ID:" + ID);
+//			System.out.println(loc.y);
+//			System.out.println(loc.x);
 		}
 		curBlock.getCarSet().add(this);
 	}
