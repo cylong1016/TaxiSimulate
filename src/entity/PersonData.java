@@ -1,9 +1,10 @@
 package entity;
 
 import java.awt.Point;
+import java.util.concurrent.LinkedBlockingQueue;
 
-import config.Config;
 import util.Util;
+import config.Config;
 
 /**
  * 模拟一个人
@@ -19,12 +20,45 @@ public class PersonData extends Entity {
 	/** 等待时间 秒 */
 	private int waitTime = Config.WAIT_TIME;
 
+	/** 打车的概率 */
+	private double probability = 0.38;
+	/** 是否在等待车到来 */
+	private boolean waitCar;
+
 	/** 乘上车的人 */
 	public static int PEOPLE_WITH_CAR = 0;
 
 	public PersonData(int ID, Block curBlock, Traffic traffic, Point end) {
 		super(ID, curBlock, traffic);
 		this.end = end;
+		takeATaxi();
+	}
+
+	private void takeATaxi() {
+		double temp = Math.random();
+		if (temp < probability) { // 打车
+			for(int i = 0; i < Config.NUM; i++) {
+				for(int j = (loc.x - i < 0 ? 0 : loc.x - i); j < (loc.x + i > Config.NUM - 1 ? Config.NUM - 1 : loc.x + i); j++) {
+					for(int k = (loc.y - i < 0 ? 0 : loc.y - i); k < (loc.y + i > Config.NUM - 1 ? Config.NUM - 1 : loc.y + i); k++) {
+						Block tmpBlock = blocks[j][k];
+						LinkedBlockingQueue<CarData> carSet = tmpBlock.getCarSet();
+						CarData carData = carSet.peek();
+						if (carData == null) {
+							continue;
+						} else {
+							for(CarData data : carSet) {
+								if(!data.full && data.getCalledBy() == null) {
+									this.waitCar = true;
+									data.setCalledBy(this);
+									return;
+								}
+							}
+						}
+					}
+				}
+
+			}
+		}
 	}
 
 	public static synchronized void addPeopleWithCar() {
@@ -41,12 +75,20 @@ public class PersonData extends Entity {
 		areas[loc.x / gridPerArea][loc.y / gridPerArea].addPersonWithCar();
 		this.geton = geton;
 	}
+	
+	public boolean isWaitCar() {
+		return this.waitCar;
+	}
+	
+	public void setWaitCar(boolean waitCar) {
+		this.waitCar = waitCar;
+	}
 
 	@Override
 	public void run() {
 		while(true) {
 			Util.sleep(1000);
-			if (geton) { // 15秒内上车了
+			if (geton) { // 上车了
 				break;
 			}
 			waitTime--;

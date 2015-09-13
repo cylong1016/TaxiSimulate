@@ -29,6 +29,8 @@ public class CarData extends Entity {
 
 	/** 是否有人 */
 	public boolean full = false;
+	/** 叫车的人 */
+	private PersonData calledBy;
 	/** 上一步的方向 */
 	private int state = 1;
 
@@ -46,11 +48,14 @@ public class CarData extends Entity {
 	public void run() {
 		while(true) {
 			Util.sleep(timePerGrid);
-			PersonData personData = checkPerson();
-			if (personData == null) {
-				randomRun(); // 车上没人，随便走
+			if(calledBy != null) {
+				goToDestination(calledBy.loc);
 			}
-
+			PersonData personData = checkPerson();
+			calledBy = null;
+			if (personData == null) {
+				randomRun(); // 没找到人，随便走
+			}
 		}
 	}
 	
@@ -63,11 +68,19 @@ public class CarData extends Entity {
 	private PersonData checkPerson() {
 		LinkedBlockingQueue<PersonData> person = curBlock.getPersonSet();
 		if (person.size() != 0 && !full) {
-			PersonData personData = person.poll(); // 删除乘客在路上的信息
+			PersonData personData = person.peek(); // 获得乘客在路上的信息
 			if(personData == null) {
 				return null;
 			}
+			
+			if(personData.isWaitCar()) { // 此人在等车
+				if(calledBy == null || calledBy.ID != personData.ID) {
+					return null;
+				}
+			}
+			
 			personData.setGeton(true);; // 乘客上车
+			person.poll(); // 删除乘客在街道上的信息
 			PersonData.addPeopleWithCar();
 			this.full = true; // 车满
 			toDestination(personData.end); // 车上有人，按照一定路线走
@@ -98,7 +111,7 @@ public class CarData extends Entity {
 	private void goToDestination(Point destination) {
 		if(loc.x - destination.x > 0) {
 			while(loc.x != destination.x) {
-				if(checkPerson() != null) {
+				if(calledBy == null && checkPerson() != null) {
 					return;
 				}
 				move(LEFT);
@@ -109,7 +122,7 @@ public class CarData extends Entity {
 			}
 		} else if(loc.x - destination.x < 0) {
 			while(loc.x != destination.x) {
-				if(checkPerson() != null) {
+				if(calledBy == null && checkPerson() != null) {
 					return;
 				}
 				move(RIGHT);
@@ -122,7 +135,7 @@ public class CarData extends Entity {
 		
 		if(loc.y - destination.y > 0) {
 			while(loc.y != destination.y) {
-				if(checkPerson() != null) {
+				if(calledBy == null && checkPerson() != null) {
 					return;
 				}
 				move(UP);
@@ -133,7 +146,7 @@ public class CarData extends Entity {
 			}
 		} else if(loc.y - destination.y < 0) {
 			while(loc.y != destination.y) {
-				if(checkPerson() != null) {
+				if(calledBy == null && checkPerson() != null) {
 					return;
 				}
 				move(DOWN);
@@ -143,6 +156,7 @@ public class CarData extends Entity {
 				Util.sleep(timePerGrid);
 			}
 		}
+		
 	}
 
 	/**
@@ -163,7 +177,7 @@ public class CarData extends Entity {
 	 * @version 2015年9月13日  下午5:29:13
 	 */
 	private int correctDirection() {
-		int range = 9;
+		int range = 3;
 		int xOffset = Math.abs(loc.x - originaLoc.x);
 		int yOffset = Math.abs(loc.y - originaLoc.y);
 		if(xOffset + yOffset <= range) { // 未超出范围
@@ -300,4 +314,15 @@ public class CarData extends Entity {
 	private static synchronized void addEffectPassThroughGrid() {
 		effectPassThroughGrid++;
 	}
+
+	public PersonData getCalledBy() {
+		return this.calledBy;
+	}
+	
+	public void setCalledBy(PersonData calledBy) {
+		this.calledBy = calledBy;
+	}
+	
+	
+	
 }

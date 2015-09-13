@@ -22,7 +22,7 @@ public class Entity extends Thread {
 
 	/** 当前所在方块 */
 	protected Block curBlock;
-	
+
 	protected Area[][] areas;
 
 	public Entity(int ID, Block curBlock, Traffic traffic) {

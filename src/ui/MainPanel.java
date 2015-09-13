@@ -103,7 +103,7 @@ public class MainPanel extends JPanel {
 				
 				for(int i = 0; i < personNum; i++) {
 					int[] areaIndex = getAreaIndex();
-					Util.sleep(18);
+					Util.sleep(15);
 					System.out.println(i);
 					// 整体地图人起始坐标
 					int startX = areaIndex[0];
