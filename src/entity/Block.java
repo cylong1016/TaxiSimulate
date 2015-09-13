@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * 街道图中的一个方块
@@ -14,13 +15,13 @@ public class Block {
 	public int y;
 
 	private ArrayList<CarData> carSet = new ArrayList<CarData>();
-	private ArrayList<PersonData> personSet = new ArrayList<PersonData>();
+	private LinkedBlockingQueue<PersonData> personSet = new LinkedBlockingQueue<PersonData>(100);
 
 	public ArrayList<CarData> getCarSet() {
 		return this.carSet;
 	}
 
-	public ArrayList<PersonData> getPersonSet() {
+	public LinkedBlockingQueue<PersonData> getPersonSet() {
 		return this.personSet;
 	}
 

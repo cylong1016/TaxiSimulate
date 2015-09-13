@@ -34,18 +34,30 @@ public class Entity extends Thread {
 
 	public void moveUP() {
 		loc.y--;
+		if(loc.y < 0) {
+			loc.y = 0;
+		}
 	}
 
 	public void moveDown() {
 		loc.y++;
+		if(loc.y > Config.NUM - 1) {
+			loc.y = Config.NUM - 1;
+		}
 	}
 
 	public void moveLeft() {
 		loc.x--;
+		if(loc.x < 0) {
+			loc.x = 0;
+		}
 	}
 
 	public void moveRight() {
 		loc.x++;
+		if(loc.x > Config.NUM - 1) {
+			loc.x = Config.NUM - 1;
+		}
 	}
 
 	public boolean isMargin() {

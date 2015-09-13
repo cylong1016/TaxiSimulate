@@ -35,7 +35,7 @@ public class Clock extends JLabel {
 		public void run() {
 			while((temp++) != Config.TOTAL_TIME) {
 				Util.sleep(1000);
-				setText("时间: " + String.valueOf(temp));
+				setText("时间: " + String.valueOf(temp) + "s");
 			}
 		}
 	}

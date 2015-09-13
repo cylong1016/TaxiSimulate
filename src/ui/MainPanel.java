@@ -70,7 +70,7 @@ public class MainPanel extends JPanel {
 		new Thread() {
 			public void run() {
 				for(int i = 0; i < personNum; i++) {
-					Util.sleep(250);
+					Util.sleep(10);
 					int startX = (int)(Math.random() * Config.NUM);
 					int startY = (int)(Math.random() * Config.NUM);
 					Block block = blocks[startX][startY];

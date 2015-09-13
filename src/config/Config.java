@@ -8,14 +8,14 @@ package config;
 public class Config {
 
 	/** 方块数量 */
-	public static final int NUM = 50;
+	public static final int NUM = 100;
 	/** 方块大小 */
-	public static final int SIZE = 12;
+	public static final int SIZE = 6;
 	
 	/** 人数 */
-	public static final int PERSON_NUM = 1440;
+	public static final int PERSON_NUM = 60000;
 	/** 车数 */
-	public static final int CAR_NUM = 800;
+	public static final int CAR_NUM = 2000;
 	
 	/** 总时间/秒 */
 	public static final int TOTAL_TIME = 360;
