@@ -13,7 +13,7 @@ public class Config {
 	public static final int SIZE = 21;
 	/** 整个城市横竖分成多少个区域 */
 	public static int AREA_NUM = 10;
-	 
+
 	/** 人数 */
 	public static final int PERSON_NUM = 5520;
 	/** 人等待时间 /秒 */
